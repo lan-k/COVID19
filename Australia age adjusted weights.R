@@ -1,11 +1,6 @@
 library(tidyverse)
-#library(runner)
-
 
 ###age_adjust to Australian population profile
-
-setwd('D:/work/SAHMRI/COVID-19/Data')
-
 
 world_pop <- read.csv("World population by age 2020.csv", stringsAsFactors = F) %>%
   select(-Country.code,-Type,-year)
@@ -32,7 +27,6 @@ rel_rate_overall <- rel_rate %>%
   summarise(prop_hosprate_Aus = sum(prop_hosprate_Aus),
             prop_icurate_Aus = sum(prop_icurate_Aus),
             prop_deathrate_Aus = sum(prop_deathrate_Aus))
-
 
 
 country_pop <- function(label, abbrev=label) {
@@ -94,10 +88,8 @@ france <- country_pop("France")
 uk <- country_pop("United Kingdom","UK")
 iceland <- country_pop("Iceland")
 sweden <- country_pop("Sweden")
-australia <- country_pop("Australia")  ##WHO slightly different to population from ABS ERP
-
 
 weights_world <- bind_rows(usa, spain, italy,switzerland,netherlands, 
-                              france, uk, iceland,sweden, china, australia)
+                              france, uk, iceland,sweden, china)
 write.csv(weights_world, "Weights world to Aus Ferguson.csv",row.names=FALSE)
 
