@@ -5,23 +5,16 @@ library(tidyverse)
 
 ###age_adjust to Australian population profile
 
-setwd('D:/work/SAHMRI/COVID-19/Data')
-
 
 world_pop <- read.csv("World population by age 2020.csv", stringsAsFactors = F) %>%
   select(-Country.code,-Type,-year)
 
 ###populations are per 1000
 
-# china_rate <- read.csv('Rates China Ferguson.csv', stringsAsFactors = F) %>%
-#   mutate(agegrp = row_number() ) %>%
-#   select(age_group, prop_hosp80, prop_ICU80,prop_death80)
-#  
-# save(china_rate, file="china_rate.Rdata")  
 
 load(file="china_rate.Rdata")
   
-  
+
 
 country_pop <- function(label) {
   
