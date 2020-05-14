@@ -1,0 +1,4 @@
+This folder contains a list of CSV files extracted from
+https://health.govcms.gov.au/resources/publications/coronavirus-covid-19-at-a-glance
+https://www.icuregswe.org/en/data--results/covid-19-in-swedish-intensive-care/
+https://www.comunidad.madrid/servicios/salud/2019-nuevo-coronavirus
