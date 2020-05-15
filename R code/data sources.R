@@ -10,15 +10,16 @@ usa_ny <- read.csv('https://covidtracking.com/api/v1/states/NY/daily.csv',string
 dates <- sapply(usa_ny$date, function(s) {stri_sub(s, 5, 2) <- '/'
                               stri_sub(s, 8, 2) <- '/'
                               return(s)})
+
 usa_ny <- usa_ny %>%
-  mutate(Date = as.Date(dates,format='%Y/%m/%d' )) %>%
+  mutate(Date = as.Date(dates,format='%Y/%m/%d' ), region = "USA-New York") %>%
   select(-hospitalized)  %>%   #this is cumulative
   rename(cases =positive ,
          icu = inIcuCurrently ,
          hospitalized = hospitalizedCurrently,
          deaths = death) %>%
   arrange(Date) %>%
-  select(Date, cases, deaths, hospitalized, icu, recovered)
+  select(Date, cases, deaths, hospitalized, icu, recovered, region)
 
 italy <- read.csv("https://raw.githubusercontent.com/neherlab/covid19_scenarios/master/data/case-counts/italy/Italy.tsv", 
                   sep="\t", skip = 3,stringsAsFactors = F) %>%
