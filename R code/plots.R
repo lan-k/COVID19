@@ -1,28 +1,9 @@
-
-
-# library(readxl)
-# library(RCurl)
-# library(httr)
-# library(tidyverse)
-# library(runner)
-# library(stringi)
-# library(urltools)
 library(RColorBrewer)
 
-
-setwd("D:/work/SAHMRI/COVID-19/Data")
-
 ###read the data###
-source("D:/work/SAHMRI/COVID-19/R code/data sources adj to Aus.R")
+source("data sources adj to Aus.R")
 
 today <- as.character(format(Sys.Date(), "%Y%b%d"))
-#save(region_data, file="COVID_Region_paper_28Apr2020.Rdata")
-
-pop_density <- c(3.3,10060574/23844 ,5400,10715,488,12000,1011) #per sqkm
-###order is "Australia","Lombardy", "Madrid", "New York", "Netherlands","Geneva","Ile-de-France","Iceland"
-##order is madrid, geneva, iceland
-
-
 
 
 ####PLOTS########
@@ -40,17 +21,11 @@ x2 = 1:xmax2
 
 
 #####confirmed cases############
-fn <- paste0("D:/work/SAHMRI/COVID-19/age adjusted paper/Cases ICU death ",paste0(today,".tif"))
-tiff(file=fn, width = 2400, height = 2400, units = "px", res=300)
+
 par(oma=c(1,1,1,6.5), xpd=F)
-#par( mar=c(3, 4.7, 2, 0), mfrow=c(2,2)) #bottom, left, top,right
+
 par( mar=c(2, 4.7, 2, 0), mfrow=c(2,2))
 
-# fn <- paste0("D:/work/SAHMRI/COVID-19/age adjusted paper/Case comparisons ",paste0(today,".pdf"))
-# pdf(file=fn)
-# 
-# par(oma=c(1,1,1,7), xpd=F)
-# par( mar=c(2, 4.7, 2, 0), mfrow=c(2,1)) #bottom, left, top,right
 
 ymax = max(c(max(aus_rate$cases,na.rm=T), max(nyc_rate$cases,na.rm=T),
              max(madrid_rate$cases,na.rm=T),max(lombardy_rate$cases,na.rm=T),
@@ -68,7 +43,7 @@ axis(1, at=c(10,20,30,40,50,60,70,80),font=2, cex=0.9)
 axis(2, c(100,1000,10000,100000,1000000), labels = c("100","1k","10k",'100k',""), 
      las = 1, font=2, cex=0.9, cex.axis=0.9)
 mtext(side=2, text="Confirmed cases", line=3, font=2, cex=0.9, cex.axis=0.9)
-#mtext(side=1, text="Days since 100 confirmed cases", line=3, font=2, cex=1)
+
 
 #log - scale
 lines(which(!is.na(madrid_rate$cases)), madrid_rate$cases[!is.na(madrid_rate$cases)], type='o',  pch=20,col=cols[2])
@@ -113,13 +88,6 @@ lines(which(!is.na(sweden_rate$case_rate)), sweden_rate$case_rate[!is.na(sweden_
 
 lines(which(!is.na(aus_rate$case_rate)), aus_rate$case_rate[!is.na(aus_rate$case_rate)], type='o',  pch=20,col=cols[9])
 
-#points(x2[1:length(aus_rate$hosp_rate)], aus_rate$hosp_rate, pch=20,col=cols[6])
-
-
-
-########ICU & deaths###############
-
-###add min x for ICeland 0 ICU occupancy
 
 ##ICU admissions
 
@@ -154,7 +122,7 @@ lines(which(!is.na(aus_rate$ICU_rate)), aus_rate$ICU_rate[!is.na(aus_rate$ICU_ra
 
 
 ###fix zeros
-
+###add min x for Iceland 0 ICU occupancy
 points(points(x2[1:length(iceland_rate$ICU_rate)], iceland_rate$ICU_zero, pch=20,col=cols[7]))
 
 
@@ -166,7 +134,6 @@ plot(x = x1, lombardy_rate$death_rate,log="y", type='o',  pch=20,
      main = "",  font=2,
      ylim=c(0.001, ymax), col=cols[1], yaxt="n") #type='o',  pch=20,
 #log - scale
-
 
 title("D",adj=0, line=0.5)
 axis(1, at=c(10,20,30,40,50,60,70,80),font=2, cex=0.9)
@@ -191,12 +158,12 @@ plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
 
 leg = c("Australia",
         "Lombardy", "Madrid", "New York", "Netherlands", 
-        "Geneva","Ile-de-France","Iceland","Sweden")     #, 
+        "Geneva","Ile-de-France","Iceland","Sweden")      
 col_order = c(9,1:8)
 legend("topright", legend=leg,  xpd = TRUE, inset=c(0,0),
        pch=20, col=cols[col_order],  cex=0.9,  text.font=2, bty="n") 
 
-dev.off()
+
 
 
 
