@@ -3,3 +3,6 @@ https://health.govcms.gov.au/resources/publications/coronavirus-covid-19-at-a-gl
 https://covidtracking.com/api/v1/states/NY/daily.csv
 https://www.icuregswe.org/en/data--results/covid-19-in-swedish-intensive-care/
 https://www.comunidad.madrid/servicios/salud/2019-nuevo-coronavirus
+
+Other data sources and pre COVID-19 bed numbers were imported from
+https://github.com/neherlab/covid19_scenarios
