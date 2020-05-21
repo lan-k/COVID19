@@ -5,7 +5,6 @@ source("data sources adj to Aus.R")
 
 today <- as.character(format(Sys.Date(), "%Y%b%d"))
 
-
 ####PLOTS########
 cols <- brewer.pal(8,"Dark2")
 cols[9] <-"black"
@@ -14,11 +13,7 @@ cols[9] <-"black"
 
 xmax1 = max(aus_rate$day, nyc_rate$day,madrid_rate$day,lombardy_rate$day,
             netherlands_rate$day,geneva_rate$day)  #italy is max
-xmax2 = max(aus_rate$day, nsw_rate$day,vic_rate$day,qld_rate$day,
-            wa_rate$day,sa_rate$day,tas_rate$day) #nsw is max
 x1 = 1:xmax1
-x2 = 1:xmax2
-
 
 #####confirmed cases############
 
@@ -26,16 +21,14 @@ par(oma=c(1,1,1,6.5), xpd=F)
 
 par( mar=c(2, 4.7, 2, 0), mfrow=c(2,2))
 
-
 ymax = max(c(max(aus_rate$cases,na.rm=T), max(nyc_rate$cases,na.rm=T),
              max(madrid_rate$cases,na.rm=T),max(lombardy_rate$cases,na.rm=T),
              max(netherlands_rate$cases,na.rm=T),max(geneva_rate$cases,na.rm=T)))
 
-
 plot(x = x1, lombardy_rate$cases,log="y", type='o',  pch=20, 
      xlab = "", ylab="",  cex=0.9,
      main = "", xlim=c(1,xmax1),
-     ylim=c(100,1000000), col=cols[1], yaxt = "n", font=2) #
+     ylim=c(100,1000000), col=cols[1], yaxt = "n", font=2) 
 
 
 title("A",adj=0, line=0.5)
@@ -64,7 +57,6 @@ ymax = max(c(max(aus_rate$case_rate,na.rm=T), max(nyc_rate$case_rate,na.rm=T),
              max(netherlands_rate$case_rate,na.rm=T),max(geneva_rate$case_rate,na.rm=T)))
 
 
-
 plot(x = x1, lombardy_rate$case_rate,log="y", type='o',  pch=20, 
      xlab = "", ylab="", 
      main = "", xlim=c(1,xmax1), 
@@ -74,7 +66,6 @@ title("B",adj=0, line=0.5)
 axis(1, at=c(10,20,30,40,50,60,70,80),font=2, cex=0.9)
 axis(2, c(0.1,1,10,100,1000), labels = c(0.1,1,10,100,"1k"),las = 1, font=2, cex=0.9)
 mtext(side=2, text="Case rate per 100k", line=3, font=2, cex=0.9, cex.axis=0.9)
-#mtext(side=1, text="Days since 100 confirmed cases", line=2.5, font=2, cex=0.9, cex.axis=0.9)
 
 
 #log - scale
@@ -85,7 +76,6 @@ lines(which(!is.na(geneva_rate$case_rate)), geneva_rate$case_rate[!is.na(geneva_
 lines(which(!is.na(iledefrance_rate$case_rate)), iledefrance_rate$case_rate[!is.na(iledefrance_rate$case_rate)], type='o',  pch=20,col=cols[6])
 lines(which(!is.na(iceland_rate$case_rate)), iceland_rate$case_rate[!is.na(iceland_rate$case_rate)], type='o',  pch=20,col=cols[7])
 lines(which(!is.na(sweden_rate$case_rate)), sweden_rate$case_rate[!is.na(sweden_rate$case_rate)], type='o',  pch=20,col=cols[8])
-
 lines(which(!is.na(aus_rate$case_rate)), aus_rate$case_rate[!is.na(aus_rate$case_rate)], type='o',  pch=20,col=cols[9])
 
 
@@ -106,7 +96,6 @@ axis(2, c(0.001, 0.01,0.1,1,10,100,1000), labels = c("0",0.01,0.1,1,10,100,"1k")
      las = 1, font=2, cex.axis=0.9)
 mtext(side=2, text="ICU occupancy rate per 100k", line=2.9, font=2,cex=0.9, cex.axis=0.9)
 mtext(side=1, text="Days since 100 confirmed cases", line=2.5, font=2,cex=0.9, cex.axis=0.9)
-
 
 
 #log - scale
@@ -132,7 +121,7 @@ par( mar=c(3, 4.7, 2, 0))
 plot(x = x1, lombardy_rate$death_rate,log="y", type='o',  pch=20,
      xlab = "", ylab="", 
      main = "",  font=2,
-     ylim=c(0.001, ymax), col=cols[1], yaxt="n") #type='o',  pch=20,
+     ylim=c(0.001, ymax), col=cols[1], yaxt="n") 
 #log - scale
 
 title("D",adj=0, line=0.5)
