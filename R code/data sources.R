@@ -38,28 +38,14 @@ spain_madrid <- read.csv("https://raw.githubusercontent.com/neherlab/covid19_sce
   mutate(Date=as.Date(time, format = "%Y-%m-%d"), region = "ESP-Madrid") 
 
 ##source for madrid hospital data
-madrid_hosp <- read.csv("https://raw.githubusercontent.com/jtamargo/covid19/master/COVID19_hospit_prevalencia.csv",
-                        stringsAsFactors = F) %>%
-  filter(hospitalizados == "Madrid") %>%
-  pivot_longer(-hospitalizados, names_to="time", values_to="hospitalized") %>%
-  mutate(time_str = gsub("([-])\\1+","-",paste0("2020-",gsub("\\.","-",gsub("[^0-9.-]", "", time)))),
-         Date = as.Date(time_str, format = "%Y-%d-%m")) %>%
-  select(Date,hospitalized)
-
-madrid_icu <- read.csv("https://raw.githubusercontent.com/jtamargo/covid19/master/COVID19_UCI_prevalencia.csv",
-                       stringsAsFactors = F) %>%
-  filter(UCI == "Madrid") %>%
-  pivot_longer(-UCI, names_to="time", values_to="icu") %>%
-  mutate(time_str = gsub("([-])\\1+","-",paste0("2020-",gsub("\\.","-",gsub("[^0-9.-]", "", time)))),
-         Date = as.Date(time_str, format = "%Y-%d-%m")) %>%
-  select(Date,icu)
-
+madrid_hosp <- read.csv("Madrid.csv",stringsAsFactors = F) %>%
+  mutate(Date=as.Date(Date, format = "%d/%m/%Y")) %>%
+  select(Date, cases, hospitalized, icu)
 
 #replace icu and hosp values for madrid
 spain_madrid <- spain_madrid %>%
-  select(-c(icu, hospitalized)) %>%
-  left_join(madrid_hosp, by="Date") %>%
-  left_join(madrid_icu, by="Date")
+  select(-c(cases, icu, hospitalized)) %>%
+  left_join(madrid_hosp, by="Date") 
 
 
 ####netherlands ICU 
