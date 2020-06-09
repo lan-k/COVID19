@@ -8,9 +8,8 @@ library(fpc)
 
 ###age_adjust to Australian population profile
 
-setwd('D:/work/SAHMRI/COVID-19/Data')
 
-source('D:/work/SAHMRI/COVID-19/R code/age adjusted weights international.R')
+source('age adjusted weights international.R')
 
 length(t(pop_list))
 ###weights for all countries in WHO
@@ -48,9 +47,6 @@ aggregate(wt_death,by=list(km.res.3$cluster),FUN=max)
 weights_all <- data.frame(weights_all, km.res.3$cluster) 
 
 
-# clusplot(scale(wt_death), km.res.3$cluster, color=TRUE, shade=TRUE,
-#          labels=2, lines=0)
-
 ###dendrograms
 
 # Ward Hierarchical Clustering
@@ -58,7 +54,7 @@ d <- dist(wt_death, method = "euclidean") # distance matrix
 fit <- hclust(d, method="ward.D")
 plot(fit) # display dendogram
 groups <- cutree(fit, k=3) # cut tree into 3 clusters
-# draw dendogram with red borders around the 5 clusters
+# draw dendogram with red borders around the clusters
 rect.hclust(fit, k=3, border="red") 
 
 aggregate(wt_death,by=list(groups),FUN=mean)
