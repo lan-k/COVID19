@@ -1,8 +1,7 @@
 ####cluster weights
-rm(list = ls())
+
 
 library(tidyverse)
-library(runner)
 library(mclust)
 library(cluster) 
 library(fpc)
