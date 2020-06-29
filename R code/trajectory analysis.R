@@ -18,7 +18,7 @@ plot_death <- function(country) {
   df <- deaths %>% filter(location == country)
   par(mfrow=c(1,2))
   plot(df$day, df$death_rate_week)
-  lines(df$day, df$death_rate_smooth, col="red")
+  lines(df$day, df$death_rate_smooth, col="red", main=country)
   
   plot(df$day, df$total_death_rate)
   lines(df$day, df$total_death_rate_smooth, col="red")
