@@ -27,27 +27,6 @@ plot_death <- function(country) {
 }
 
 ###weights for all countries in WHO
-# weights_all <- calc_weights("China",as.vector(t(pop_list)))
-# save(weights_all, file="weights_UN_China.Rdata")
-# load("weights_UN_China.Rdata")
-# 
-# 
-# length(t(pop_list))
-# 
-# country_codes <- world_pop %>%
-#   select(Country, Country.code) %>%
-#   rename(country=Country)
-# 
-
-# 
-# weights_ISO <-  weights_all %>%
-#   inner_join(country_codes, by="country") %>%
-#   inner_join(UN_iso_codes, by=c("Country.code"="UN_code")) %>%
-#   arrange(country) %>%
-#   select(weight_death, ISO3, Country.code) %>%
-#   mutate(ISO3=substr(ISO3,1,3))
-# 
-# save(weights_ISO, file="weights_ISO_China.Rdata")
 
 load("weights_ISO_China.Rdata")
 
@@ -64,12 +43,6 @@ maxday <- paste0("day",minfu)
 
 #################international########################
 #ECDC data
-# ecdcdata <- read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv",
-#                  na.strings = "",  stringsAsFactors = F) %>%
-#   mutate(Date = as.Date(dateRep, format = "%d/%m/%Y")) %>%
-#   select(Date, cases, deaths, popData2018)  #fileEncoding = "UTF-8-BOM",
-# countries <- read.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/ecdc/locations.csv",
-#                       stringsAsFactors = F,na.strings = "")
 # owid <-  read.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv",
 #   stringsAsFactors = F,na.strings = "") 
 
@@ -102,15 +75,12 @@ deaths <- owid %>%
       idx = Date, na_rm = TRUE),
     death_rate_week = weight_death*1000000*mean_deaths_7/population,
     total_death_rate=weight_death*1000000*total_deaths_7/population,
-    #total_death_rate_smooth = as.vector(smooth(total_death_rate, kind="S", twiceit=T)),
-    #deaths_smooth=as.vector(smooth(mean_deaths_7, kind="S", twiceit=T)),
-    #death_rate_smooth = weight_death*1000000*mean_deaths_7/population,
     deathdays =total_deaths >= 1) %>%
   ungroup()
 
 n_nation <- unique(deaths$location)
 
-###spline fit to total death rate
+###spline fit to smooth death rate
 total_death_rate_smooth <- NULL
 for (i in seq(length(n_nation))) {
   nation <- deaths %>% filter(location == n_nation[i])
@@ -263,7 +233,8 @@ plotMeanTraj(r3, ylim=c(0,2))
 plotMedTraj(r3, ylim=c(0,5))
 plotBoxplotTraj(r3)
 plotCombTraj(r3)  #
-plotCombTraj(r3,stat.type = "median", ylim=c(0,1), col=1:maxclust) 
+plotCombTraj(r3,stat.type = "median", ylim=c(0,1), col=1:maxclust,  xlab = 'Days since first death', 
+             ylab='Mean death rate in past 7 days per 100k'
 legend("topleft", legend=1:maxclust,
        pch=1:maxclust,lty=1:maxclust, col=1:maxclust)
 
@@ -315,7 +286,8 @@ plotMeanTraj(t3, ylim=c(0,400))
 plotMedTraj(t3, ylim=c(0,500))
 plotBoxplotTraj(t3)
 plotCombTraj(t3)  #
-plotCombTraj(t3,ylim=c(0,350), col=1:maxclust) 
+plotCombTraj(t3,stat.type = "median", ylim=c(0,350), xlab = 'Days since first death', 
+             ylab='Cumulative death rate per 100k', col=1:maxclust)
 legend("topleft", legend=1:maxclust,
        pch=1:maxclust,lty=1:maxclust, col=1:maxclust)
 
