@@ -2,7 +2,7 @@ library(tmap)
 
 data("World")
 
-load(file=".\Data\IFR_wt_cluster.Rdata")
+load(file="./Data/IFR_wt_cluster.Rdata")
 clust <- World %>%
   left_join(weights_ISO_clust, by=c("iso_a3"="ISO3")) %>%
   mutate(IFR=round(100*IFR, digits=2))
