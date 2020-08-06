@@ -9,17 +9,17 @@ IFR_China <- 0.00657  ##overall IFR from Verity 2020 based on Chinese data
 
 
 ###weights for all countries in WHO
-load(".\Data\weights_ISO_China.Rdata")
+load("./Data/weights_ISO_China.Rdata")
 
 ###world populations by age group per 1000
-world_pop <- read.csv(".\Data\World population by age 2020.csv", stringsAsFactors = F) 
+world_pop <- read.csv("./Data/World population by age 2020.csv", stringsAsFactors = F) 
 world_pop$pop <- rowSums(world_pop[,5:22])
 pop_total <- sum(world_pop[,"pop"])
 world_pop <- world_pop %>%
   mutate(pop = pop/pop_total) %>%
   select(Country.code, pop)
 
-UN_iso_codes <- read.csv(".\Data\ISO3 to UN code.csv",stringsAsFactors = F) %>%
+UN_iso_codes <- read.csv("./Data/ISO3 to UN code.csv",stringsAsFactors = F) %>%
   mutate(ISO3=substr(ISO3,1,3))
 
 weights_ISO_clust <- weights_ISO %>%
