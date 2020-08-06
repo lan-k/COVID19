@@ -3,12 +3,9 @@
 library(tidyverse)
 library(runner)
 
-###age_adjust to Australian population profile
-
-setwd('D:/work/SAHMRI/COVID-19/Data')
 
 ###world populations by age group per 1000
-world_pop <- read.csv("World population by age 2020.csv", stringsAsFactors = F) %>%
+world_pop <- read.csv("./Data/World population by age 2020.csv", stringsAsFactors = F) %>%
   select(-Country.code,-Type,-year) 
 
 #this is the list of countries that can be used in adjustment
@@ -16,7 +13,6 @@ pop_list <- world_pop %>% select(Country)
 
 load(file="china_rate.Rdata")
   
-
 country_pop <- function(label) {
   
   ##remove age categories 95+
@@ -109,7 +105,7 @@ abbrev_list <- c("USA","Spain","Italy","Switzerland","Netherlands",
                  "China" ,"France","UK","Iceland","Sweden","Brazil",
                  "Russia", "Algeria", "Indonesia","Iran")
 
-weights_world <- calc_weights("Australia",country_list, abbrev_list)
+weights_world <- calc_weights("China",country_list, abbrev_list)
 
 
 
