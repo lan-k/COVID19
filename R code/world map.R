@@ -1,13 +1,10 @@
 rm(list = ls())
-.libPaths("C:/Users/lan.kelly/Documents/R/win-library/4.0")
+
 ####R world map for COVID weights and IFRs
 library(rworldmap)
 library(dplyr)
 
-#setwd('D:/work/SAHMRI/COVID-19/Data')
-setwd("C:/Users/lan.kelly/Documents/SAHMRI/COVID-19/Data")
-
-load(file="IFR_wt_cluster.Rdata")
+load(file="./Data/IFR_wt_cluster.Rdata")
 
 IFR_med_hi <- weights_ISO_clust %>%
   filter(IFR_class != 1) %>%
@@ -16,34 +13,20 @@ IFR_med_hi <- weights_ISO_clust %>%
 
 weights_ISO_clust$IFR_class <- as.factor(weights_ISO_clust$IFR_class)
 
-##change codes for SOuth Sudan to Sudan
-
-#weights_ISO_clust$ISO3[weights_ISO_clust$ISO3 == "SSD"] <- "SDN"
-
-# data(countryExData)
-# regions <- countryExData[,1:4]
-# weights_ISO_clust <- weights_ISO_clust %>%
-#   left_join(regions, by=c("ISO3" = "ISO3V10"))
 
 
 sPDF <- joinCountryData2Map( weights_ISO_clust
                              , joinCode = "ISO3"
-                             , nameJoinColumn = "ISO3")  #6 codes not joined
-
-UN_PDF <- joinCountryData2Map( weights_ISO_clust
-                             , joinCode = "UN"
-                             , nameJoinColumn = "Country.code")  #7 codes not joined
+                             , nameJoinColumn = "ISO3")  
 ###plot IFR
 
 mapCountryData( sPDF, nameColumnToPlot="IFR", numCats = 8,
                 mapTitle = "",  addLegend = T,
                 oceanCol = 'light blue', missingCountryCol='white',
-                colourPalette = "heat" ) #"rainbow"
-
+                colourPalette = "heat" )
 
 
 ##label the categories
-
 
 levels(sPDF@data[["IFR_class"]]) <- c("0.20 (0.18-0.23)","0.38 (0.30-0.49)","0.93 (0.78-1.03)" )
 
@@ -89,7 +72,7 @@ dev.off()
 
 
 # ---- plot trajectory ----
-load(file="world trajectories.Rdata")
+load(file=".Data/world trajectories.Rdata")
 
 table(cum_death_clusters$cluster50)
 table(cum_death_clusters$cluster100)
@@ -171,39 +154,4 @@ do.call( addMapLegendBoxes
 
 dev.off()
 
-
-
-####tmap
-library(tmap)
-
-data("World")
-
-clust <- World %>%
-  left_join(weights_ISO_clust, by=c("iso_a3"="ISO3")) %>%
-  mutate(IFR=round(100*IFR, digits=2))
-
-
-
-
-tmap_mode("plot")  #plot mode
-
-tm_shape(clust) +
-  tm_polygons("IFR", legend.title = "IFR (%)", colorNA = "white", palette="YlOrRd") + #, palette = "heat"
-  tm_layout(bg.color = "light blue", inner.margins = c(0, .02, .02, .02))
-
-tmap_mode("view")  #interactive
-
-tm <- tm_shape(clust) +
-  tm_polygons("IFR", legend.title = "IFR (%)", colorNA = "white", drop.levels = T,
-              palette="YlOrRd", inner.margins = c(0, .02, .02, .02), alpha=.7)  #-RdYlGn
-
-tm
-
-## save as stand-alone HTML file ("view" mode)
-tmap_save(tm, filename = "IFR world_map.html")
-
-
-###quick map
-tmap_mode("plot")  #plot mode
-qtm(clust, fill = "IFR", fill.pallette = "RdYlBu")
 
