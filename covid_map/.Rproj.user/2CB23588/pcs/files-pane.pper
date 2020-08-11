@@ -1,0 +1,9 @@
+{
+    "path" : "~/R/covid_map",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}
