@@ -11,7 +11,11 @@ tmap_mode("view")  #interactive
 
 tm <- tm_shape(clust) +
   tm_polygons("IFR", legend.title = "IFR (%)", colorNA = "white", drop.levels = T,
-              palette="YlOrRd", inner.margins = c(0, .02, .02, .02), alpha=.7)  #-RdYlGn
+              palette="YlOrRd", inner.margins = c(0, .02, .02, .02), alpha=.7)  +
+  tm_layout("Infection Fatality Ratio",
+      bg.color = "light blue", inner.margins = c(0, .02, .02, .02)) +
+  tm_basemap(NULL ) + tm_view(projection = 0)
+
 
 tm
 
