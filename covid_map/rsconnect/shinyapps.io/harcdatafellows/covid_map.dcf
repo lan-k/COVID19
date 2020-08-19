@@ -1,0 +1,12 @@
+name: covid_map
+title: covid_map
+username:
+account: harcdatafellows
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2656049
+bundleId: 3496101
+url: https://harcdatafellows.shinyapps.io/covid_map/
+when: 1597044990.2365
+asMultiple: FALSE
+asStatic: FALSE
