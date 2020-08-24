@@ -13,9 +13,7 @@ clust <- World %>%
 
 ui <- fluidPage(
   
-  h2("Majour title"),
-  
-  h4("Minor title"),
+  h2("COVID-19 Infection Fatality Ratio"),
   
   tmapOutput("mymap"), 
   
@@ -27,7 +25,8 @@ server <- function(input, output) {
   
   output$mymap <- renderTmap({
     tm_shape(clust) +
-      tm_polygons("IFR", legend.title = "IFR (%)", colorNA = "white", drop.levels = T,
+      tm_polygons("IFR",
+                  legend.title = "IFR (%)", colorNA = "white", drop.levels = T,
                   palette="YlOrRd", inner.margins = c(0, .02, .02, .02), 
                   alpha=.7)
   })
