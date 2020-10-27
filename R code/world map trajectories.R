@@ -5,103 +5,70 @@ library(rworldmap)
 library(dplyr)
 
 
-
-
 # ---- plot trajectory ----
-load(file="./Data/world_trajectories_13OCT2020.Rdata")
+load(file="world_150daytrajectories_13OCT2020.Rdata")
 
-table(cum_death_clusters$cluster30) #1=61, 2=53
-table(cum_death_clusters$cluster60) #1=78, 2=36
-table(cum_death_clusters$cluster120) #1=98, 2=16
-table(cum_death_clusters$cluster180) #1=86, 2=28
+table(cum_death_clusters$cluster50) #1=75, 2=47
+table(cum_death_clusters$cluster150) #1=61, 2=38, 3=23
 
 
 nochange <- cum_death_clusters %>%
-  filter(cluster30 == cluster60 & cluster60 == cluster120  & cluster60==cluster180)
-#37 Brazil and Kuwait in fast cluster at all time points
+
+  filter(cluster50 == cluster150)  #64
 
 
-diff <- cum_death_clusters %>% anti_join(nochange, by="ID")  #77
-worse <- cum_death_clusters %>% filter(cluster30 ==1 &  cluster180 == 2) #17
-better <- cum_death_clusters %>% filter(cluster30 ==2 &  cluster180 == 1)  #42
+diff <- cum_death_clusters %>% anti_join(nochange, by="ID")  #58
+better <- cum_death_clusters %>% 
+  filter((cluster50 == 2 &  cluster150 == 1)  ) #14
+worse <- cum_death_clusters %>% 
+  filter((cluster50 ==1 &  cluster150 %in% c(2,3))  |
+           (cluster50 ==2 &  cluster150 == 3)) #44
 
 
-cum_death_clusters <- cum_death_clusters %>%
-  mutate(traj_change = 
-           as.factor(case_when(cluster30 == 1 & cluster60 == 1  & cluster120 == 1 &  cluster180 == 1 ~ 1,
-                               cluster30 == 2 & cluster60 == 2 & cluster120 == 2 &  cluster180 == 2 ~ 2,
-                               cluster30 == 1 & (cluster60 !=1  | cluster120 != 1) & cluster180 == 1 ~ 3,
-                               cluster30 == 2 & (cluster60 !=2  | cluster120 != 2) & cluster180 == 2 ~ 4,
-                               cluster30 == 2 & cluster180 == 1 ~ 5,
-                               cluster30 == 1 & cluster180 == 2 ~ 6,
-                                )))
+
 table(cum_death_clusters$traj_change, useNA = "always")
+# 1   2    3    4 
+# 47  17   14   44   
 
+table(cum_death_clusters$cluster50,cum_death_clusters$traj_change)
+table(cum_death_clusters$cluster150,cum_death_clusters$traj_change)
 
-table(cum_death_clusters$cluster60,cum_death_clusters$traj_change)
-table(cum_death_clusters$cluster120,cum_death_clusters$traj_change)
+cum_death_clusters$cluster50 <- as.factor(cum_death_clusters$cluster50)
+cum_death_clusters$cluster150 <- as.factor(cum_death_clusters$cluster150)
 
-cum_death_clusters$cluster30 <- as.factor(cum_death_clusters$cluster30)
-cum_death_clusters$cluster60 <- as.factor(cum_death_clusters$cluster60)
-cum_death_clusters$cluster120 <- as.factor(cum_death_clusters$cluster120)
-cum_death_clusters$cluster180 <- as.factor(cum_death_clusters$cluster180)
 
 
 
 traj <- joinCountryData2Map( cum_death_clusters
                              , joinCode = "ISO3"
                              , nameJoinColumn = "ISO3") 
-levels(traj@data[["cluster30"]]) <- c("Slow","Fast" ) 
-levels(traj@data[["cluster60"]]) <- c("Slow","Fast" ) 
-levels(traj@data[["cluster120"]]) <- c("Slow","Fast" ) 
-levels(traj@data[["cluster180"]]) <- c("Slow","Fast" ) 
+levels(traj@data[["cluster50"]]) <- c("Steady","Moderate" ) 
+levels(traj@data[["cluster150"]]) <- c("Steady","Moderate","Fast" ) 
 
-levels(traj@data[["traj_change"]]) <- c("Slow","Fast",
-                                        "Stabilising","Accelerating",
+
+levels(traj@data[["traj_change"]]) <- c("Steady","Moderate",
                                         "Improved","Worse" ) 
 
+col2 <- c("blue","orange")
+col3 <- c("blue","orange","red")
 
-colour <- c("blue","red")
 
+tiff(file="trajectory clusters world map 50 to 150 days.tif", width = 1600, height = 1600, units = "px", res=300)
 
-tiff(file="trajectory clusters world map 30 to 180 days.tif", width = 1600, height = 1000, units = "px", res=300)
+par(mai=c(0,0,0.2,0),mfrow=c(2,1),xaxs="i",yaxs="i")
 
-#par(mai=c(0.1,0.1,0.1,0.1),mfrow=c(2,2),xaxs="i",yaxs="i") 
-par(oma=c(0.5,0.1,0.1,0.1), xpd=F)
-par(mar=c(0,0.1,0.8,0.1), mfrow=c(2,2),xaxs="i",yaxs="i")
-
-#30 days
-mapCountryData( traj, nameColumnToPlot="cluster30" , numCats=2,catMethod="categorical",
+#50 days
+mapCountryData( traj, nameColumnToPlot="cluster50" , numCats=2,catMethod="categorical",
                 mapTitle = "A", addLegend = F,
                 oceanCol = 'light blue', missingCountryCol='white',
-                colourPalette = colour ) #
+                colourPalette = col2 ) #
 
-#60 days
-mapCountryData( traj, nameColumnToPlot="cluster60" , numCats=2,catMethod="categorical",
+#150 days
+mapParams <- mapCountryData( traj, nameColumnToPlot="cluster150" , numCats=2,catMethod="categorical",
                              mapTitle = "B", addLegend = F,
                              oceanCol = 'light blue', missingCountryCol='white',
-                             colourPalette = colour ) #
+                             colourPalette = col3 ) #
 
-##120 days
-
-mapParams <- mapCountryData( traj, nameColumnToPlot="cluster120" , numCats=2,catMethod="categorical",
-                             mapTitle = "C", addLegend = F,
-                             oceanCol = 'light blue', missingCountryCol='white',
-                             colourPalette = colour) #"heat"
-
-
-##180 days
-
-mapParams <- mapCountryData( traj, nameColumnToPlot="cluster180" , numCats=2,catMethod="categorical",
-                             mapTitle = "D", addLegend = F,
-                             oceanCol = 'light blue', missingCountryCol='white',
-                             colourPalette = colour) #"heat"
-
-
-###overlay legend
-#par(fig = c(0, 1, 0, 1 ), oma = c(0, 0, 0, 0), mar = c(2, 0, 0, 0), new = TRUE)
-par(fig = c(0, 1, 0, 1 ), oma = c(0, 0, 0, 0), mar = c(0.2, 0, 0, 0), new = TRUE)
-plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
 
 do.call( addMapLegendBoxes
          , c(mapParams
@@ -116,15 +83,14 @@ dev.off()
 
 
 ###change in group membership over time
-tiff(file="trajectory change world map 30 to 180 days.tif", width = 1600, height = 1050, units = "px", res=300)
+tiff(file="trajectory change world map 50 to 150 days.tif", width = 1600, height = 1050, units = "px", res=300)
 
 par(mai=c(0,0,0.2,0),mfrow=c(1,1),xaxs="i",yaxs="i")  #
 
 mapParams <- mapCountryData( traj, nameColumnToPlot="traj_change" , numCats=4,catMethod="categorical",
                              mapTitle = "", addLegend = F,
                              oceanCol = 'light blue', missingCountryCol='white',
-                             colourPalette = c("blue", "red","purple" ,
-                                               "yellow" ,"green" ,"orange")) #"heat"  
+                             colourPalette = c("blue", "orange","green" ,"red")) #"heat"  
 
 do.call( addMapLegendBoxes
          , c(mapParams
