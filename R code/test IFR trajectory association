@@ -1,0 +1,29 @@
+library(dplyr)
+
+load(file="./Data/world_150daytrajectories_13OCT2020.Rdata")
+load(file="./Data/IFR_wt_cluster.Rdata")
+
+
+weights_ISO_clust <- weights_ISO_clust %>% select(ISO3, IFR_class, Country)
+
+#merge IFR clusters with trajectory clusters
+traj_IFR_clusters <- cum_death_clusters %>%
+  select(-Country) %>%
+  full_join(weights_ISO_clust, by='ISO3') %>%
+  mutate(traj_change=as.numeric(traj_change),
+    traj_change = if_else(is.na(as.numeric(traj_change)), 
+                               0, as.numeric(traj_change))) %>%
+  select(ISO3, Country, IFR_class, 
+         cluster50, cluster100, cluster150, traj_change) %>%
+  filter(!is.na(Country)) %>%
+  mutate(cluster50 = as.factor(cluster50),
+         cluster100 = as.factor(cluster100),
+         cluster150 = as.factor(cluster150))
+
+with(traj_IFR_clusters, table(IFR_class, traj_change, useNA = "always"))
+
+(tab_change <- with(traj_IFR_clusters, table(IFR_class, traj_change)))
+100*prop.table(tab_change, margin=1)
+
+#test association
+fisher.test(tab_change,simulate.p.value=TRUE) #0.01388 without 0, 0.001 with 0
