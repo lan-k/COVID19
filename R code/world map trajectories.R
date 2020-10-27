@@ -4,12 +4,11 @@ rm(list = ls())
 library(rworldmap)
 library(dplyr)
 
-#setwd('D:/work/SAHMRI/COVID-19/Data')
-setwd("C:/Users/lan.kelly/Documents/SAHMRI/COVID-19/Data")
+
 
 
 # ---- plot trajectory ----
-load(file="world_trajectories_13OCT2020.Rdata")
+load(file="./Data/world_trajectories_13OCT2020.Rdata")
 
 table(cum_death_clusters$cluster30) #1=61, 2=53
 table(cum_death_clusters$cluster60) #1=78, 2=36
