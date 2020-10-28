@@ -6,7 +6,7 @@ library(dplyr)
 
 
 # ---- plot trajectory ----
-load(file="world_150daytrajectories_13OCT2020.Rdata")
+load(file="../Data/world_150daytrajectories_13OCT2020.Rdata")
 
 table(cum_death_clusters$cluster50) #1=75, 2=47
 table(cum_death_clusters$cluster150) #1=61, 2=38, 3=23
