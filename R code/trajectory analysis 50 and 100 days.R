@@ -8,7 +8,7 @@ mindeath <- 25 #exclude regions with total number of deaths less than this 100 d
 
 owid <-  read.csv('https://covid.ourworldindata.org/data/owid-covid-data.csv',
     stringsAsFactors = F,na.strings = "")
-load("./Data/weights_ISO_China.Rdata")
+load("../Data/weights_ISO_China.Rdata")
 UN_iso_codes <- read.csv("./Data/ISO3 to UN code.csv",stringsAsFactors = F) %>%
      mutate(ISO3=substr(ISO3,1,3))
 
