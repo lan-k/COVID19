@@ -7,7 +7,7 @@ library(runner)
 mindeath <- 25 #exclude regions with total number of deaths less than this 100 days after first death
 
 owid <-  load(file="./Data/owid_13OCT2020.Rdata")
-load("./Data/weights_ISO_China.Rdata")
+load("../Data/weights_ISO_China.Rdata")
 UN_iso_codes <- read.csv("./Data/ISO3 to UN code.csv",stringsAsFactors = F) %>%
      mutate(ISO3=substr(ISO3,1,3))
 
