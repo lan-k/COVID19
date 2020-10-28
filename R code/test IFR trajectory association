@@ -1,7 +1,7 @@
 library(dplyr)
 
-load(file="./Data/world_150daytrajectories_13OCT2020.Rdata")
-load(file="./Data/IFR_wt_cluster.Rdata")
+load(file="../Data/world_150daytrajectories_13OCT2020.Rdata")
+load(file="../Data/IFR_wt_cluster.Rdata")
 
 
 weights_ISO_clust <- weights_ISO_clust %>% select(ISO3, IFR_class, Country)
